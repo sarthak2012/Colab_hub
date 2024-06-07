@@ -1,0 +1,337 @@
+<style>
+    /* Basic styling for the app */
+    body {
+        font-family: 'Open Sans', sans-serif;
+        background: linear-gradient(#f4dbfb, #d8dbfe);
+    
+    
+        margin: 0;
+        padding: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+        overflow-y: hidden;
+    }
+    
+    h1 {
+        text-align: center;
+        color: #fff;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    
+    /* Styling for the todo list container */
+    .todo-container {
+        max-width: 400px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 60px;
+        margin-top: 20px;
+        background : rgba(255,255,255,0.5)
+    }
+    
+    .todo-name{
+        color: black;
+    }
+    /* Styling for task input */
+    input[type="text"], input[type="date"], input[type="time"] {
+        width: calc(100% - 22px);
+        padding: 10px;
+        border: 2px solid #fda085;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+    
+    input[type="text"]:focus, input[type="date"]:focus, input[type="time"]:focus {
+        border-color: #f6d365;
+    }
+    
+    /* Styling for the task list */
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    li {
+        padding: 12px;
+        border-bottom: 1px solid #fda085;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background-color 0.2s;
+    }
+    
+    li:hover {
+        background-color: rgba(253, 160, 133, 0.1);
+    }
+    
+    /* Styling for task completion checkbox */
+    input[type="checkbox"] {
+        margin-right: 10px;
+    }
+    
+    /* Styling for delete button */
+    button {
+        background-color: #055275;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    button:hover {
+        background-color: #f6d365;
+    }
+    
+    /* Styling for the timer display */
+    .timer {
+        font-weight: bold;
+        margin-right: 10px;
+        color: #fda085;
+    }
+    
+    /* Styling for calendar container */
+    .calendar-container {
+        margin: 20px auto;
+        max-width: 400px;
+        text-align: center;
+        color: white;
+    }
+    
+    .calendar-container h2 {
+        margin-bottom: 10px;
+        color: #fff;
+    }
+    
+    #calendarList {
+        list-style: none;
+        padding: 0;
+        color: #fff;
+    }
+    
+    .checkbox-container {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      
+      .checkbox-container input[type="checkbox"] {
+        display: none;
+      }
+      
+      .checkbox-container input[type="checkbox"] + label {
+        cursor: pointer;
+        font-size: 20px;
+      }
+      
+      .checkbox-container input[type="checkbox"] + label::before {
+        content: "\2605"; /* Unicode character for a star */
+        display: inline-block;
+        margin-right: 5px; /* Adjust spacing between star and label */
+      }
+      
+      .checkbox-container input[type="checkbox"]:checked + label::before {
+        color: gold; /* Change color of star when checked */
+      }
+      .golden {
+        color: gold;
+      }
+      a img {
+        position: fixed; /* Use fixed positioning */
+        top: 20px; /* Position the image 20px from the top */
+        left: 20px; /* Position the image 20px from the left */
+        width: 30px; /* Adjust the width as desired */
+        height: 30px; /* Adjust the height as desired */
+        border-radius: 50%; /* Rounded corners */
+        padding: 5px; /* Add some padding around the image */
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Subtle box shadow */
+        cursor: pointer; /* Change cursor to pointer */
+        transition: transform 0.2s ease; /* Add transition for hover effect */
+    }
+    
+    /* Hover effect */
+    a img:hover {
+        transform: scale(1.1); /* Scale up the icon slightly */
+        box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3); /* Darken the box shadow */
+    }
+    
+</style>
+<a href="index">
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAANJJREFUSEvl1EFqAkEQRuHPQwR0n4BnEEFPIWQteB1xLXgYBW/gwo17IYcIBVEamRmnOzMLcdY971X9XdUDPX+DnvneRzDEN9a5kbaJKOAHfGKFbY7kmSCFXzDBtStBCj9jlguPQuo6eIRP8ZNT+e1sleADx7/Mo/JieFUHAd9jjBPmpZVXdZDCS9JI/7knk0bUuyAqSCX/zr9uijqV1I1pZ5PUtMmd7ELOU1G0zc8EcU/RSezGF5bY5cxwG0HwRlhgkwNveotyObXn23ZQLHx9wS8QNSYZP6YqMAAAAABJRU5ErkJggg==">
+</a>
+
+<div class="container">
+    <h1 class="todo-name">Todo List App</h1>
+    
+    <div class="todo-container">
+      <!-- Task input -->
+      <input type="text" id="taskInput" placeholder="Enter a task" />
+      <input type="date" id="taskDate" placeholder="Select date" />
+      <input type="time" id="taskTime" placeholder="Select time" />
+      <button onclick="addTask()">Add Task</button>
+      
+      <!-- Task list -->
+      <ul id="taskList"></ul>
+    </div>
+  </div>
+
+  <!-- JavaScript Code -->
+  <script>
+    // State variables
+    let taskTitle = "";
+    let todos = [
+      {
+        id: "01",
+        title: "Todo List 1",
+        tasks: [
+          { id: "1", title: "App Created", important: false, completed: false, date: "", time: "" },
+          { id: "2", title: "CRUD Operation Used", important: false, completed: false, date: "", time: "" },
+          { id: "3", title: "React Native Used", important: false, completed: false, date: "", time: "" },
+          { id: "4", title: "Comments Done", important: false, completed: false, date: "", time: "" },
+          { id: "5", title: "App Completed", important: false, completed: false, date: "", time: "" }
+        ]
+      }
+    ];
+    let currentListIndex = 0;
+
+    // Function to add a new task to the current todo list
+    function addTask() {
+      const taskInput = document.getElementById("taskInput");
+      const taskDateInput = document.getElementById("taskDate");
+      const taskTimeInput = document.getElementById("taskTime");
+      taskTitle = taskInput.value.trim();
+      const taskDate = taskDateInput.value.trim();
+      const taskTime = taskTimeInput.value.trim();
+
+      // If task title is empty, do not add a task
+      if (taskTitle === "") return;
+
+      // Create a new task object
+      const newTask = {
+        id: Math.random().toString(),
+        title: taskTitle,
+        important: false, // New property for marking as important
+        completed: false,
+        date: taskDate,
+        time: taskTime,
+        timerInterval: null
+      };
+
+      // Add the new task to the current todo list
+      todos[currentListIndex].tasks.push(newTask);
+
+      // Update the task list display
+      updateTaskList();
+
+      // Clear the input fields
+      taskInput.value = "";
+      taskDateInput.value = "";
+      taskTimeInput.value = "";
+    }
+
+    // Function to toggle task completion status
+    function toggleTask(taskId) {
+      const currentTasks = todos[currentListIndex].tasks;
+      const task = currentTasks.find(task => task.id === taskId);
+
+      // Toggle the completion status
+      task.completed = !task.completed;
+
+      // Update the task list display
+      updateTaskList();
+    }
+
+    // Function to mark task as important
+    function markAsImportant(taskId) {
+      const currentTasks = todos[currentListIndex].tasks;
+      const task = currentTasks.find(task => task.id === taskId);
+
+      // Toggle the importance status
+      task.important = !task.important;
+
+      // Update the task list display
+      updateTaskList();
+
+      
+      // Change color of the button to golden permanently
+      const importantBtn = document.querySelector(`[data-task-id="${taskId}"]`);
+      importantBtn.style.color = task.important ? 'gold' : 'initial';
+    
+    }
+
+    // Function to delete a task from the current todo list
+    function deleteTask(taskId) {
+      let currentTasks = todos[currentListIndex].tasks;
+      currentTasks = currentTasks.filter(task => task.id !== taskId);
+
+      // Update the tasks list
+      todos[currentListIndex].tasks = currentTasks;
+
+      // Update the task list display
+      updateTaskList();
+    }
+
+    // Function to update the task list display
+    function updateTaskList() {
+      const taskList = document.getElementById("taskList");
+      taskList.innerHTML = "";
+
+      todos[currentListIndex].tasks.forEach(task => {
+        // Create a list item for each task
+        const li = document.createElement("li");
+
+        // Create checkbox for task completion
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.completed;
+        checkbox.onchange = () => toggleTask(task.id);
+        li.appendChild(checkbox);
+
+        // Create span for task title
+        const span = document.createElement("span");
+        span.textContent = task.title;
+        if (task.important) {
+          span.classList.add("important"); // Apply style for important tasks
+        }
+        if (task.completed) {
+          span.style.textDecoration = "line-through";
+          span.style.color = "#888";
+        }
+        li.appendChild(span);
+
+        // Create date and time display
+        const dateSpan = document.createElement("span");
+        dateSpan.textContent = ` (${task.date} ${task.time})`;
+        li.appendChild(dateSpan);
+
+        // Create delete button
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.onclick = () => deleteTask(task.id);
+        li.appendChild(deleteBtn);
+
+        // Create important button
+        const importantBtn = document.createElement("button");
+        importantBtn.textContent = "★"; // Star symbol
+        importantBtn.setAttribute('data-task-id', task.id); // Set custom attribute for identification
+        importantBtn.onclick = () => markAsImportant(task.id);
+        li.appendChild(importantBtn);
+
+
+
+    // Append the list item to the task list
+    taskList.appendChild(li);
+    });
+    }
+
+    // Initial rendering of the task list
+    updateTaskList();
+  </script>

@@ -1,0 +1,115 @@
+<style>
+    /* Add your CSS styles here */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        /* Set a color gradient background */
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        color: #fff;
+        text-align: center;
+    }
+    h1, h2 {
+        margin-bottom: 20px;
+    }
+    input[type="file"] {
+        background-color: #fff;
+        color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+    button {
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        background-color: #333;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #555;
+    }
+    #fileList {
+        list-style-type: none;
+        padding: 0;
+        text-align: left;
+    }
+    #fileList li {
+        margin: 5px 0;
+        padding: 10px;
+        background-color: #333;
+        border-radius: 5px;
+    }
+    #fileList a {
+        text-decoration: none;
+        color: #fff;
+    }
+   
+</style>
+
+<div class="container">
+    <h1>File Sharing</h1>
+    <input type="file" id="fileInput" multiple>
+    <button id="uploadButton">Upload</button>
+    <ul id="fileList"></ul>
+</div>
+
+<script>
+    // JavaScript for file upload and download link handling
+    const fileInput = document.getElementById('fileInput');
+    const uploadButton = document.getElementById('uploadButton');
+    const fileList = document.getElementById('fileList');
+
+    uploadButton.addEventListener('click', async () => {
+        const files = fileInput.files;
+
+        if (files.length === 0) {
+            alert('Please select a file to upload.');
+            return;
+        }
+
+        // Clear the file list before adding new files
+        fileList.innerHTML = '';
+
+        // Iterate through each file
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            // Create a FormData object to send the file to the server
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Send the file to the Django server using fetch API
+            const response = await fetch('/upload/', {
+                method: 'POST',
+                body: formData
+            });
+
+            // Parse the JSON response from the server
+            const data = await response.json();
+
+            // Create a list item to display the file
+            const li = document.createElement('li');
+
+            // Create a download link for the file
+            if (data.status === 'success') {
+                const link = document.createElement('a');
+                link.href = data.download_link;
+                link.textContent = data.filename;
+
+                // Append the link to the list item
+                li.appendChild(link);
+            } else {
+                // Display an error message if there was an issue
+                li.textContent = 'Error uploading file: ' + file.name;
+            }
+
+            // Append the list item to the file list
+            fileList.appendChild(li);
+        }
+    });
+</script>

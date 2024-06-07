@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Level Organization Group Chat</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(#f4dbfb,#d8dbfe);
+    }
+    .container {
+        max-width: 80%;
+        margin: 20px auto;
+        padding: 20px;
+        border: 10px solid #ffffff;
+        border-radius: 15px;
+        background: linear-gradient(#f4dbfb,#d8dbfe);
+        opacity: 2e;
+        
+    }
+    .chat-box {
+        height: 400px;
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+    }
+    .message {
+        margin-bottom: 5px;
+    }
+    .message .user {
+        font-weight: bold;
+        color: #007bff;
+    }
+    .message .time {
+        font-size: 12px;
+        color: #999;
+    }
+    .input-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .input-group input[type="text"] {
+        flex: 1;
+        padding: 8px;
+        border-radius: 3px;
+        border: 1px solid #ccc;
+    }
+    .input-group button {
+        padding: 8px 15px;
+        border-radius: 3px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .input-group button:hover {
+        background-color: #0056b3;
+    }
+    a img {
+        width: 30px; /* Adjust the width as desired */
+        height: 30px; /* Adjust the height as desired */
+        border-radius: 50%; /* Rounded corners */
+        padding: 5px; /* Add some padding around the image */
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Subtle box shadow */
+        cursor: pointer; /* Change cursor to pointer */
+        transition: transform 0.2s ease; /* Add transition for hover effect */
+    }
+
+    /* Hover effect */
+    a img:hover {
+        transform: scale(1.1); /* Scale up the icon slightly */
+        box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3); /* Darken the box shadow */
+    }
+</style>
+</head>
+<a href="index">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAANJJREFUSEvl1EFqAkEQRuHPQwR0n4BnEEFPIWQteB1xLXgYBW/gwo17IYcIBVEamRmnOzMLcdY971X9XdUDPX+DnvneRzDEN9a5kbaJKOAHfGKFbY7kmSCFXzDBtStBCj9jlguPQuo6eIRP8ZNT+e1sleADx7/Mo/JieFUHAd9jjBPmpZVXdZDCS9JI/7knk0bUuyAqSCX/zr9uijqV1I1pZ5PUtMmd7ELOU1G0zc8EcU/RSezGF5bY5cxwG0HwRlhgkwNveotyObXn23ZQLHx9wS8QNSYZP6YqMAAAAABJRU5ErkJggg==">
+</a>
+
+<body>
+<div class="container">
+    <h1 style="text-align: center;">Group Chat</h1>
+    <div id="chat-box" class="chat-box"></div>
+    <div class="input-group">
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button id="send-btn">Send</button>
+    </div>
+</div>
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const messageInput = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    // Dummy data for demonstration
+    const messages = [
+        { user: 'John Doe', message: 'Hello everyone!', time: '12:00 PM' },
+        { user: 'Alice Smith', message: 'Hi John!', time: '12:02 PM' },
+        { user: 'Bob Johnson', message: 'How are you all doing today?', time: '12:05 PM' },
+        { user: 'Emily Brown', message: 'I\'m good, thanks!', time: '12:10 PM' },
+        // Add more messages as needed
+    ];
+
+    // Function to display messages in the chat box
+    function displayMessages() {
+        chatBox.innerHTML = '';
+        messages.forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.innerHTML = `
+                <span class="user">${msg.user}:</span>
+                <span>${msg.message}</span>
+                <span class="time">${msg.time}</span>
+            `;
+            chatBox.appendChild(messageDiv);
+        });
+        // Scroll to the bottom of the chat box
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Display initial messages
+    displayMessages();
+
+    // Event listener for sending messages
+    sendBtn.addEventListener('click', () => {
+        const message = messageInput.value.trim();
+        if (message !== '') {
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            messages.push({ user: 'You', message: message, time: currentTime });
+            displayMessages();
+            messageInput.value = '';
+        }
+    });
+
+    // Simulate incoming messages (for demo purposes)
+    setInterval(() => {
+        const randomUser = ['John Doe', 'Alice Smith', 'Bob Johnson', 'Emily Brown'][Math.floor(Math.random() * 4)];
+        const randomMessage = ['Hi there!', 'How are you?', 'Nice to meet you!', 'What do you think about the project?'][Math.floor(Math.random() * 4)];
+        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        messages.push({ user: randomUser, message: randomMessage, time: currentTime });
+        displayMessages();
+    }, 5000); // Simulate new messages every 5 seconds (for demo purposes)
+</script>
+</body>
+</html>
